@@ -1,0 +1,32 @@
+
+  <body>
+    <h1>Explore Travel Destinations 🗺️</h1>
+
+    <div id="map"></div>
+    <script src="https://apis.mapmyindia.com/advancedmaps/v1/<%= apiKey %>/map_load?v=1.5"></script>
+
+    <script>
+      // Initialize the map
+      var map = new MapmyIndia.Map('map', {
+        center: [26.2389, 73.0243], // Optional default center (e.g. Jodhpur)
+        zoom: 12,
+        zoomControl: true
+      });
+
+      // Travel destinations passed from backend
+      const locations = <%= JSON.stringify(locations) %>;
+
+      // Add markers
+      locations.forEach(place => {
+        new MapmyIndia.Marker({
+          map: map,
+          position: [place.lat, place.lng],
+          title: place.name,
+          popupHtml: `<strong>${place.name}</strong><br>${place.description || ''}`
+        });
+      });
+
+      console.log("Locations:", <%= JSON.stringify(locations) %>);
+    </script>
+  </body>
+
