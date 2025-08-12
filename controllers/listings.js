@@ -26,6 +26,21 @@ module.exports.renderNewForm = (req,res) => {
   res.render("listings/new.ejs");
 };
 
+module.exports.filterByIcon = async (req, res) => {
+  //console.log("Yeah this route detected");
+  const { keyword } = req.params;
+
+  // Convert to lowercase and trim for consistency
+  const iconKeyword = keyword.toLowerCase().trim();
+
+  const listings = await Listing.find({
+    description: { $regex: iconKeyword, $options: 'i' }
+  });
+
+  res.render('listings/index', { allListings:listings,search:iconKeyword });
+};
+
+
 module.exports.showListing = async (req,res) => {
   let {id} = req.params;
   const listing = await Listing.findById(id).populate({path:"reviews", populate:{
